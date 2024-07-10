@@ -1,5 +1,165 @@
-template-repository (1.0-1) unstable; urgency=medium
+easyeffects (7.1.7-1) unstable; urgency=medium
 
-  * Initial release
+  * New upstream release.
+  * debian/control: Bump Standards-Version to 4.7.0.
+  * debian/control: Replace build-dependency pkg-config => pkgconf.
+  * Merge changes from Ubuntu:
 
- -- Tsic404 <liuheng@deepin.org>  Sat, 28 Jan 2023 13:46:49 +0800
+  [ Erich Eickmeyer ]
+  * d/control: Demote calf-plugins to Recommends (LP: #2063879)
+    For newly-installed packages, calf-plugins will not be installed
+    if lsp-plugins-lv2 or lsp-plugins are available. If you have a
+    special need for calf-plugins, please install it manually.
+
+ -- Boyuan Yang <byang@debian.org>  Fri, 05 Jul 2024 15:16:35 -0400
+
+easyeffects (7.1.6-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <byang@debian.org>  Mon, 08 Apr 2024 23:33:22 -0400
+
+easyeffects (7.1.5-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <byang@debian.org>  Tue, 26 Mar 2024 15:15:29 -0400
+
+easyeffects (7.1.4-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <byang@debian.org>  Mon, 05 Feb 2024 12:10:45 -0500
+
+easyeffects (7.1.3-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <byang@debian.org>  Sun, 26 Nov 2023 10:59:30 -0500
+
+easyeffects (7.1.1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/patches: Dropped, merged upstream.
+  * debian/control: Add new needed build-dependency ladspa-sdk.
+
+ -- Boyuan Yang <byang@debian.org>  Fri, 03 Nov 2023 12:30:20 -0400
+
+easyeffects (7.1.0-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/control: Limit required lsp-plugin version (>= 1.2.10).
+  * debian/patches/: Dropped old patches, merged upstream.
+  * debian/patches/:
+    + 0001-src-rnnoise.cpp-Guard-RNNoise-init_release-with-ENAB.patch:
+      Add patch to fix FTBFS when rnnoise is not enabled.
+
+ -- Boyuan Yang <byang@debian.org>  Wed, 13 Sep 2023 12:39:48 -0400
+
+easyeffects (7.0.7-3) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Boyuan Yang <byang@debian.org>  Fri, 18 Aug 2023 21:47:56 -0400
+
+easyeffects (7.0.7-3~exp1) experimental; urgency=medium
+
+  * debian/patches/0001-Revert-lookup-of-tbb-library.patch: Use
+    old method to lookup libtbb library to avoid FTBFS on
+    32-bit platform due to different pkg-config name (tbb.pc vs.
+    tbb32.pc).
+
+ -- Boyuan Yang <byang@debian.org>  Fri, 18 Aug 2023 10:21:25 -0400
+
+easyeffects (7.0.7-2) unstable; urgency=medium
+
+  * Upload to unstable. (Closes: #1040946)
+  * debian/control: Make binary package recommends mda-lv2 and
+    zam-plugins. (Closes: #1023254)
+  * debian/control: Drop useless build-dep on librubberband-dev.
+
+ -- Boyuan Yang <byang@debian.org>  Wed, 16 Aug 2023 14:22:08 -0400
+
+easyeffects (7.0.7-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/rules:
+    + Explicitly disable rnnoise (See 7.0.1-1~exp1 changes).
+  * debian/control:
+    + Add new build-dependency libsoundtouch-dev.
+    + Drop build-dependency libspeex-dev, not needed by upstream.
+    + Indicate that we need GTK 4 (>= 4.10).
+  * debian/copyright: Correct project license to be GPL-3.0-or-later.
+
+ -- Boyuan Yang <byang@debian.org>  Wed, 16 Aug 2023 14:07:28 -0400
+
+easyeffects (7.0.1-1) unstable; urgency=medium
+
+  * Upload to unstable.
+  * Upload v7.0.1 for now, until 7.0.1 is backported to bookworm-backports.
+
+ -- Boyuan Yang <byang@debian.org>  Sat, 17 Jun 2023 09:59:45 -0400
+
+easyeffects (7.0.1-1~exp1) experimental; urgency=medium
+
+  * Team upload.
+  * New upstream release (7.0.1).
+  * Update Vcs links to use Multimedia Team namespace (see #1036461 for
+    confirmation of Uploader's intent).
+  * Add deactivated dh_auto_configure to disable rrnoise, which is not yet
+    available in Debian (blocked by #980839, and looks like "toxic candy").
+    This override will most likely need to be activated in 7.0.4 (possibly
+    earlier).
+
+ -- Nicholas D Steeves <sten@debian.org>  Mon, 29 May 2023 17:33:56 -0400
+
+easyeffects (7.0.0-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <byang@debian.org>  Wed, 02 Nov 2022 17:27:35 -0400
+
+easyeffects (6.3.0-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/control: Add new build-dependency.
+
+ -- Boyuan Yang <byang@debian.org>  Mon, 05 Sep 2022 16:02:56 -0400
+
+easyeffects (6.2.8-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <byang@debian.org>  Sat, 30 Jul 2022 15:39:05 -0400
+
+easyeffects (6.2.7-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <byang@debian.org>  Wed, 20 Jul 2022 14:21:07 -0400
+
+easyeffects (6.2.6-3) unstable; urgency=medium
+
+  * Downgrade "lsp-plugins-lv2 | lsp-plugins" to Recommends since
+    they are not available on Debian armel.
+  * debian/upstream/metadata: Added.
+
+ -- Boyuan Yang <byang@debian.org>  Sat, 25 Jun 2022 15:38:15 -0400
+
+easyeffects (6.2.6-2) unstable; urgency=medium
+
+  * debian/rules: Add missing -latomic LDFLAGS on needed architectures.
+
+ -- Boyuan Yang <byang@debian.org>  Fri, 24 Jun 2022 14:38:00 -0400
+
+easyeffects (6.2.6-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <byang@debian.org>  Fri, 24 Jun 2022 09:03:10 -0400
+
+easyeffects (6.2.5+git20220618.1-1) unstable; urgency=medium
+
+  * Initial release. (Closes: #1006277)
+
+ -- Boyuan Yang <byang@debian.org>  Sat, 18 Jun 2022 17:43:17 -0400
