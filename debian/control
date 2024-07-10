@@ -1,15 +1,57 @@
-Source: template-repository
-Section: unknown
+Source: easyeffects
+Section: sound
 Priority: optional
-Maintainer: Tsic404 <liuheng@deepin.org>
-Build-Depends: debhelper (>= 11)
-Standards-Version: 4.1.3
-Homepage: https://github.com/deepin-community/template-repository
-#Vcs-Browser: https://salsa.debian.org/debian/deepin-community-template-repository
-#Vcs-Git: https://salsa.debian.org/debian/deepin-community-template-repository.git
+Maintainer: Debian Multimedia Maintainers <debian-multimedia@lists.debian.org>
+Uploaders:
+ Boyuan Yang <byang@debian.org>,
+Build-Depends:
+ appstream-util,
+ debhelper-compat (= 13),
+ desktop-file-utils,
+ gettext,
+ itstool,
+ ladspa-sdk,
+ libadwaita-1-dev,
+ libbs2b-dev,
+ libebur128-dev,
+ libfftw3-dev,
+ libfmt-dev,
+ libglib2.0-dev,
+ libgsl-dev,
+ libgtk-4-bin,
+ libgtk-4-dev (>= 4.10),
+ liblilv-dev,
+ libpipewire-0.3-dev,
+ libsamplerate0-dev,
+ libsigc++-3.0-dev,
+ libsndfile-dev,
+ libsoundtouch-dev,
+ libspeexdsp-dev,
+ libtbb-dev,
+ libzita-convolver-dev,
+ lv2-dev,
+ meson,
+ nlohmann-json3-dev,
+ pkgconf,
+Standards-Version: 4.7.0
+Homepage: https://github.com/wwmm/easyeffects
+Vcs-Git: https://salsa.debian.org/multimedia-team/easyeffects.git
+Vcs-Browser: https://salsa.debian.org/multimedia-team/easyeffects
+Rules-Requires-Root: no
 
-Package: template-repository
+Package: easyeffects
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Recommends:
+ lsp-plugins-lv2 (>= 1.2.10) | lsp-plugins (>= 1.2.10) | calf-plugins,
+ mda-lv2,
+ zam-plugins,
+Description: Audio effects for PipeWire applications
+ This program provides various audio effects for PipeWire
+ applications.
+ .
+ This application was formerly known as PulseEffects,
+ but it was renamed to EasyEffects after it started to use
+ GTK4 and GStreamer usage was replaced by native PipeWire filters.

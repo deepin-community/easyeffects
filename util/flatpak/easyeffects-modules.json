@@ -1,0 +1,385 @@
+{
+    "name": "easyeffects-modules",
+    "modules": [
+        {
+            "name": "pipewire",
+            "buildsystem": "meson",
+            "config-opts": [
+                "-Dgstreamer=disabled",
+                "-Dman=disabled",
+                "-Dsystemd=disabled",
+                "-Dudev=disabled",
+                "-Dudevrulesdir=disabled",
+                "-Dsession-managers=[]",
+                "-Djack=enabled"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/pipewire/pipewire.git",
+                    "tag": "0.3.69",
+                    "commit": "cd8be0ba3b27542253f7744b699c2ede159e2d7c"
+                }
+            ]
+        },
+        {
+            "name": "libsigc++",
+            "buildsystem": "meson",
+            "config-opts": [
+                "-Dbuild-examples=false"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/libsigc++/3.6/libsigc++-3.6.0.tar.xz",
+                    "sha256": "c3d23b37dfd6e39f2e09f091b77b1541fbfa17c4f0b6bf5c89baef7229080e17",
+                    "x-checker-data": {
+                        "type": "gnome",
+                        "name": "libsigc++",
+                        "stable-only": true
+                    }
+                }
+            ],
+            "cleanup": [
+                "/lib/sigc++*"
+            ]
+        },
+        {
+            "name": "libebur128",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DBUILD_STATIC_LIBS=OFF",
+                "-DCMAKE_INSTALL_LIBDIR=lib"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/jiixyj/libebur128",
+                    "tag": "v1.2.6",
+                    "commit": "67b33abe1558160ed76ada1322329b0e9e058b02",
+                    "x-checker-data": {
+                        "type": "json",
+                        "url": "https://api.github.com/repos/jiixyj/libebur128/releases/latest",
+                        "tag-query": ".tag_name",
+                        "version-query": "$tag | sub(\"^jq-\"; \"\")",
+                        "timestamp-query": ".published_at"
+                    }
+                }
+            ],
+            "post-install": [
+                "install -Dm644 -t $FLATPAK_DEST/share/licenses/libebur128 COPYING"
+            ]
+        },
+        {
+            "name": "zita-convolver",
+            "no-autogen": true,
+            "subdir": "source",
+            "make-install-args": [
+                "PREFIX=${FLATPAK_DEST}",
+                "LIBDIR=${FLATPAK_DEST}/lib"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/zita-convolver-4.0.3.tar.bz2",
+                    "sha512": "62d7841757f10c094e43ed755e187f947c5743f302ed2a1ee6064a850c18921466f4505d8a2a7b3ad23619db7f1ad7307e1dfb2e8a1e7685e60ece2ffff4f6ca"
+                },
+                {
+                    "type": "patch",
+                    "path": "patch/zita-convolver/0001-Fix-makefile.patch"
+                }
+            ],
+            "modules": [
+                "shared-modules/linux-audio/fftw3f.json",
+                "shared-modules/linux-audio/lv2.json",
+                "shared-modules/linux-audio/lilv.json",
+                "shared-modules/linux-audio/ladspa.json",
+                {
+                    "name": "bs2b",
+                    "rm-configure": true,
+                    "sources": [
+                        {
+                            "type": "archive",
+                            "url": "https://downloads.sourceforge.net/sourceforge/bs2b/libbs2b-3.1.0.tar.gz",
+                            "sha256": "6aaafd81aae3898ee40148dd1349aab348db9bfae9767d0e66e0b07ddd4b2528"
+                        },
+                        {
+                            "type": "script",
+                            "dest-filename": "autogen.sh",
+                            "commands": [
+                                "cp -p /usr/share/automake-*/config.{sub,guess} build-aux",
+                                "autoreconf -vfi"
+                            ]
+                        },
+                        {
+                            "type": "patch",
+                            "path": "patch/bs2b/001-fix-automake-dist-lzma.patch"
+                        }
+                    ],
+                    "post-install": [
+                        "install -Dm644 -t $FLATPAK_DEST/share/licenses/bs2b COPYING"
+                    ],
+                    "cleanup": [
+                        "/bin"
+                    ]
+                },
+                {
+                    "name": "speexdsp",
+                    "buildsystem": "autotools",
+                    "sources": [
+                        {
+                            "type": "git",
+                            "url": "https://gitlab.xiph.org/xiph/speexdsp",
+                            "tag": "SpeexDSP-1.2.1",
+                            "commit": "1b28a0f61bc31162979e1f26f3981fc3637095c8",
+                            "x-checker-data": {
+                                "type": "git",
+                                "tag-pattern": "^SpeexDSP-([\\d.]+)"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "rnnoise",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/xiph/rnnoise/releases/download/v0.2/rnnoise-0.2.tar.gz",
+                    "sha256": "90fce4b00b9ff24c08dbfe31b82ffd43bae383d85c5535676d28b0a2b11c0d37",
+                    "x-checker-data": {
+                        "type": "json",
+                        "url": "https://api.github.com/repos/xiph/rnnoise/releases/latest",
+                        "version-query": ".tag_name | sub(\"^v\"; \"\")",
+                        "url-query": ".assets[] | select(.name==\"rnnoise-\" + $version + \".tar.gz\") | .browser_download_url"
+                    }
+                },
+                {
+                    "//": "downloads the file as found by this script https://github.com/xiph/rnnoise/blob/904a876dce1f9ab8860c0a5000ed151f9f6eef58/download_model.sh",
+                    "type": "archive",
+                    "url": "https://media.xiph.org/rnnoise/models/rnnoise_data-0b50c45.tar.gz",
+                    "sha256": "4ac81c5c0884ec4bd5907026aaae16209b7b76cd9d7f71af582094a2f98f4b43"
+                }
+            ],
+            "cleanup": [
+                "/share/doc/rnnoise"
+            ]
+        },
+        {
+            "name": "soundtouch",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://codeberg.org/soundtouch/soundtouch.git",
+                    "tag": "2.3.3",
+                    "commit": "e83424d5928ab8513d2d082779c275765dee31b9",
+                    "x-checker-data": {
+                        "type": "git",
+                        "tag-pattern": "^([\\d.]+)$",
+                        "versions": {
+                            "!=": "2.3.2"
+                        }
+                    }
+                }
+            ],
+            "cleanup": [
+                "/bin",
+                "/lib/cmake",
+                "/share/doc"
+            ]
+        },
+        {
+            "name": "nlohmann-json",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DJSON_BuildTests=false"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/nlohmann/json",
+                    "tag": "v3.11.3",
+                    "commit": "9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03",
+                    "x-checker-data": {
+                        "type": "json",
+                        "url": "https://api.github.com/repos/nlohmann/json/releases/latest",
+                        "tag-query": ".tag_name",
+                        "version-query": "$tag | sub(\"^jq-\"; \"\")",
+                        "timestamp-query": ".published_at"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "tbb",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DTBB_TEST=OFF"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2021.12.0.tar.gz",
+                    "sha256": "c7bb7aa69c254d91b8f0041a71c5bcc3936acb64408a1719aec0b2b7639dd84f",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 227581,
+                        "stable-only": true,
+                        "url-template": "https://github.com/oneapi-src/oneTBB/archive/refs/tags/v$version.tar.gz"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "libportal",
+            "buildsystem": "meson",
+            "config-opts": [
+                "-Ddocs=false",
+                "-Dbackend-gtk4=enabled"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/flatpak/libportal.git",
+                    "tag": "0.7.1",
+                    "commit": "e9ed3a50cdde321eaf42361212480a66eb94a57a",
+                    "x-checker-data": {
+                        "type": "json",
+                        "url": "https://api.github.com/repos/flatpak/libportal/releases/latest",
+                        "tag-query": ".tag_name",
+                        "version-query": "$tag | sub(\"^jq-\"; \"\")",
+                        "timestamp-query": ".published_at"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "fmt",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DCMAKE_INSTALL_PREFIX=/app",
+                "-DCMAKE_INSTALL_LIBDIR=/app/lib",
+                "-DBUILD_SHARED_LIBS=ON",
+                "-DFMT_TEST=Off"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/fmtlib/fmt",
+                    "tag": "10.2.1",
+                    "commit": "e69e5f977d458f2650bb346dadf2ad30c5320281",
+                    "x-checker-data": {
+                        "type": "json",
+                        "url": "https://api.github.com/repos/fmtlib/fmt/releases/latest",
+                        "tag-query": ".tag_name",
+                        "version-query": "$tag | sub(\"^jq-\"; \"\")",
+                        "timestamp-query": ".published_at"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "gsl",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://ftp.gnu.org/gnu/gsl/gsl-2.8.tar.gz",
+                    "sha256": "6a99eeed15632c6354895b1dd542ed5a855c0f15d9ad1326c6fe2b2c9e423190",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 1267,
+                        "stable-only": true,
+                        "url-template": "https://ftp.gnu.org/gnu/gsl/gsl-$version.tar.gz"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "mold",
+            "sources": [
+                {
+                    "type": "archive",
+                    "dest-filename": "mold-linux.tar.gz",
+                    "only-arches": [
+                        "x86_64"
+                    ],
+                    "url": "https://github.com/rui314/mold/releases/download/v2.32.0/mold-2.32.0-x86_64-linux.tar.gz",
+                    "sha256": "2e69989cc1c0041ecfcb31fec57b2a5caa7802848d9468ffa5b1b348b26e4982",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 241732,
+                        "stable-only": true,
+                        "url-template": "https://github.com/rui314/mold/releases/download/v$version/mold-$version-x86_64-linux.tar.gz"
+                    }
+                },
+                {
+                    "type": "archive",
+                    "dest-filename": "mold-linux.tar.gz",
+                    "only-arches": [
+                        "aarch64"
+                    ],
+                    "url": "https://github.com/rui314/mold/releases/download/v2.32.0/mold-2.32.0-aarch64-linux.tar.gz",
+                    "sha256": "c75d17c1c530dee4b9ca811aaacca782a9fe8538ae8c68ce619f198a58e2b0e7",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 241732,
+                        "stable-only": true,
+                        "url-template": "https://github.com/rui314/mold/releases/download/v$version/mold-$version-aarch64-linux.tar.gz"
+                    }
+                }
+            ],
+            "buildsystem": "simple",
+            "build-commands": [
+                "install -m 755 bin/mold $FLATPAK_DEST/bin/mold",
+                "install -m 755 bin/ld.mold $FLATPAK_DEST/bin/ld.mold"
+            ],
+            "cleanup": [
+                "*"
+            ]
+        },
+        {
+            "name": "libdeep_filter_ladspa",
+            "sources": [
+                {
+                    "type": "file",
+                    "dest-filename": "libdeep_filter_ladspa.so",
+                    "only-arches": [
+                        "x86_64"
+                    ],
+                    "url": "https://github.com/Rikorose/DeepFilterNet/releases/download/v0.5.6/libdeep_filter_ladspa-0.5.6-x86_64-unknown-linux-gnu.so",
+                    "sha256": "2ca3205c2911d389604a826a240e745597d50252b5cab81c8248252b335e2236",
+                    "x-checker-data": {
+                        "type": "json",
+                        "url": "https://api.github.com/repos/Rikorose/DeepFilterNet/releases/latest",
+                        "version-query": ".tag_name | sub(\"^v\"; \"\")",
+                        "url-query": ".assets[] | select(.name==\"libdeep_filter_ladspa-\" + $version + \"-x86_64-unknown-linux-gnu.so\") | .browser_download_url"
+                    }
+                },
+                {
+                    "type": "file",
+                    "dest-filename": "libdeep_filter_ladspa.so",
+                    "only-arches": [
+                        "aarch64"
+                    ],
+                    "url": "https://github.com/Rikorose/DeepFilterNet/releases/download/v0.5.6/libdeep_filter_ladspa-0.5.6-aarch64-unknown-linux-gnu.so",
+                    "sha256": "7b1fe31e41a4b447e2c7a6fd46397b7cd4456d6acb5a011d4ea125cb9612041e",
+                    "x-checker-data": {
+                        "type": "json",
+                        "url": "https://api.github.com/repos/Rikorose/DeepFilterNet/releases/latest",
+                        "version-query": ".tag_name | sub(\"^v\"; \"\")",
+                        "url-query": ".assets[] | select(.name==\"libdeep_filter_ladspa-\" + $version + \"-aarch64-unknown-linux-gnu.so\") | .browser_download_url"
+                    }
+                }
+            ],
+            "buildsystem": "simple",
+            "build-commands": [
+                "install -m 644 libdeep_filter_ladspa.so $FLATPAK_DEST/lib/ladspa/"
+            ]
+        }
+    ]
+}
